@@ -2,22 +2,52 @@
 
 A **Retrieval-Augmented Generation (RAG)** chatbot that lets new employees ask natural language questions about company HR policies and receive grounded, cited answers — no more digging through 60-page handbooks.
 
-Built with **LangChain**, **FAISS**, **FastEmbed**, and **Groq (Llama 3.3 70B)**, served via **Streamlit**.  
+Built with **LangChain**, **FAISS**, **FastEmbed**, and **Groq (Llama 3.3 70B)**, served via **Streamlit**.
 **100% free to run** — no paid API required for embeddings; Groq offers a generous free tier.
 
 ---
 
 ## What It Does
 
-Upload any HR/benefits PDF and ask questions like:
+Upload an HR/benefits PDF and ask questions like:
 
 - *"How many PTO days do I get in my first year?"*
 - *"When am I eligible for the 401k match?"*
-- *"What percentage does the company match on retirement contributions?"*
+- *"What percentage does the company match on retirement?"*
 - *"How does sick leave accrue?"*
 - *"What is the vacation carry-over policy?"*
+- *"How many sick days do I get per year?"*
+- *"What are the health and dental insurance benefits?"*
+- *"How many days do I need to be in the office under the hybrid policy?"*
+- *"How do I submit an expense report?"*
+- *"How often are performance reviews conducted?"*
+- *"Am I eligible for FMLA leave?"*
+- *"What is the company's anti-harassment policy?"*
 
-The bot retrieves the exact policy sections, generates a grounded answer, and cites the source document and page number. For questions outside the uploaded documents it responds politely that it doesn't have that information.
+The bot retrieves the exact policy sections, generates a grounded answer, and cites the source document and page number. For questions outside the uploaded documents, it responds honestly that it doesn't have that information rather than guessing.
+
+---
+
+## Sample Document
+
+The included `sample_docs/HR_Policy_Handbook.pdf` is a fictional "Acme Corp" employee handbook covering 12 policy areas:
+
+| # | Section |
+|---|---------|
+| 1 | Paid Time Off (PTO) |
+| 2 | Sick Leave |
+| 3 | Vacation Policy (Legacy) |
+| 4 | 401(k) Retirement Plan |
+| 5 | Health & Dental Benefits |
+| 6 | Company Holidays |
+| 7 | Remote Work Policy |
+| 8 | Expense Reimbursement |
+| 9 | Performance Reviews & Compensation Cycle |
+| 10 | Leave of Absence & FMLA |
+| 11 | Code of Conduct & Equal Employment Opportunity |
+| 12 | HR Contact Information |
+
+It's entirely synthetic content, generated for demonstration purposes — not based on any real company's actual handbook.
 
 ---
 
@@ -53,10 +83,10 @@ PDF Documents
 | `RecursiveCharacterTextSplitter` | Preserves sentence boundaries better than fixed-size splitting |
 | `FastEmbed / BAAI bge-small-en-v1.5` | ONNX-based, no torch/torchvision dependency, fast and free |
 | `FAISS` vector store | Lightweight local index, no cloud vector DB required |
-| `Persisted vectorstore` | Index saved to disk — no re-upload needed on restart |
+| Persisted vectorstore | Index saved to disk locally — no re-upload needed between local restarts |
 | `RetrievalQAWithSourcesChain` | Returns source citations alongside answers for traceability |
 | `temperature=0` | Ensures deterministic, factual responses grounded in policy text |
-| `Groq free tier` | Fast LLM inference at no cost |
+| Groq free tier | Fast LLM inference at no cost |
 
 ---
 
@@ -65,49 +95,61 @@ PDF Documents
 ```
 HR-Policy-QA-Bot/
 ├── app.py                    # Main Streamlit application
+├── create_sample_docs.py     # Generates the synthetic sample handbook
 ├── requirements.txt          # Python dependencies
-├── .env                      # Your API key (not committed)
-├── .env.example              # Environment variable template
+├── .env.example               # Environment variable template (copy to .env)
 ├── .gitignore
-├── .streamlit/
-│   └── config.toml           # Streamlit config (disables torch file watcher)
 ├── sample_docs/
 │   └── HR_Policy_Handbook.pdf
-└── vectorstore/              # FAISS index — auto-saved after first upload
+└── vectorstore/               # FAISS index — generated locally after first
+                                # upload, NOT committed to git (see .gitignore)
 ```
+
+> `venv/`, `.env`, and `vectorstore/` are intentionally excluded from version control via `.gitignore` — they're either machine-specific, secret, or regenerable.
 
 ---
 
 ## Setup & Run
 
 ### 1. Clone the repo
+
 ```bash
-git clone https://github.com/YOUR_USERNAME/hr-policy-bot.git
-cd hr-policy-bot
+git clone https://github.com/robertciceroson/HR-Policy-QA-Bot.git
+cd HR-Policy-QA-Bot
 ```
 
-### 2. Install dependencies
+### 2. Create a virtual environment and install dependencies
+
 ```bash
+python -m venv venv
+venv\Scripts\activate          # Windows
+# source venv/bin/activate     # macOS/Linux
+
 pip install -r requirements.txt
 ```
 
 ### 3. Configure your API key
+
 ```bash
-cp .env.example .env
-# Add your Groq API key — get one free at https://console.groq.com
+copy .env.example .env         # Windows
+# cp .env.example .env         # macOS/Linux
 ```
-`.env` contents:
+
+Then open `.env` and add your free Groq API key (get one at [console.groq.com](https://console.groq.com)):
+
 ```
 GROQ_API_KEY=your_groq_api_key_here
 ```
 
 ### 4. Run the app
+
 ```bash
 streamlit run app.py
 ```
 
-Open `http://localhost:8501`, upload your HR PDF from the sidebar, and start asking questions.  
-On subsequent restarts the saved index loads automatically — **no re-upload needed**.
+Open `http://localhost:8501`, upload `sample_docs/HR_Policy_Handbook.pdf` (or your own HR PDF) from the sidebar, and start asking questions.
+
+On subsequent local restarts, the saved index loads automatically — no re-upload needed, as long as `vectorstore/` still exists on disk.
 
 ---
 
@@ -116,17 +158,17 @@ On subsequent restarts the saved index loads automatically — **no re-upload ne
 | Action | Result |
 |---|---|
 | First upload | Index built and saved to `vectorstore/` |
-| App restart | Saved index auto-loaded, chat ready immediately |
-| Upload new PDF | New index replaces the old one |
+| App restart (same machine) | Saved index auto-loaded, chat ready immediately |
+| Upload a new/different PDF | New index replaces the old one |
 | Click "Clear saved index" | Index deleted, upload prompt returns |
 
-> ⚠️ **Stale index warning:** If you swap the PDF but don't clear the old index first, the app will answer from the previous document's embeddings. Always click **"🗑️ Clear saved index"** in the sidebar before uploading a replacement document.
+> ⚠️ **Stale index warning:** If you swap the source PDF but don't clear the old index first, the app will keep answering from the previous document's embeddings. Always click **"🗑️ Clear saved index"** in the sidebar before uploading a replacement document.
 
 ---
 
 ## Switching LLM Provider
 
-Only 3 lines change. The rest of the app stays identical.
+Only a few lines change. The rest of the app stays identical.
 
 **OpenAI**
 ```python
@@ -145,12 +187,15 @@ llm = ChatAnthropic(model="claude-3-5-haiku-20241022", anthropic_api_key=os.gete
 ## Deployment
 
 ### Streamlit Community Cloud (free, permanent URL)
-1. Push repo to GitHub (including `vectorstore/` folder)
-2. Go to [share.streamlit.io](https://share.streamlit.io) → New app → select repo
+
+1. Push this repo to GitHub (already done — `vectorstore/` is intentionally **not** included; it will be generated on first upload after deployment)
+2. Go to [share.streamlit.io](https://share.streamlit.io) → New app → select this repo
 3. Add `GROQ_API_KEY` under Advanced settings → Secrets
 4. Deploy — get a public URL instantly
+5. Note: on most free hosting tiers, disk storage isn't guaranteed to persist across restarts/redeploys, so you may need to re-upload your PDF after the app sleeps and wakes back up
 
 ### ngrok (instant, no GitHub needed)
+
 ```bash
 # While streamlit is running:
 ngrok http 8501
@@ -162,9 +207,9 @@ ngrok http 8501
 
 **Question:** *How many PTO days do I get in my first year?*
 
-**Answer:** *You accrue 10 days (80 hours) per year in your first year, accrued at 0.833 days per month, as stated in the PTO Accrual Schedule for full-time employees (Years 0-1).*
+**Answer:** *In your first year, you accrue 10 days (80 hours) of PTO per year, accrued at 0.833 days per month, as stated in the PTO Accrual Schedule for full-time employees (Years 0-1).*
 
-**Source:** HR_Policy_Handbook.pdf — Page 0, Page 1
+**Source:** HR_Policy_Handbook.pdf — Section 1
 
 ---
 
@@ -185,6 +230,6 @@ ngrok http 8501
 ## Responsible AI Notes
 
 - **Grounded responses only** — the model answers exclusively from retrieved document chunks
-- **Source citations** — every answer shows the source document and page number
-- **Polite fallback** — when the answer is not in the documents, the bot responds with a polite apology rather than hallucinating
-- **Local embeddings** — document content is embedded locally via FastEmbed; only the question + retrieved chunks are sent to Groq
+- **Source citations** — every answer shows the source document and section
+- **Honest fallback** — when the answer isn't in the documents, the bot says so rather than hallucinating (verified behavior: a question about vacation carry-over correctly returned "I don't have that information" since the source document's legacy vacation section doesn't specify a carry-over policy, unlike PTO and sick leave)
+- **Local embeddings** — document content is embedded locally via FastEmbed; only the question and retrieved chunks are sent to Groq

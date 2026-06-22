@@ -233,9 +233,10 @@ ngrok http 8501
 - **Source citations** — every answer shows the source document and section
 - **Honest fallback** — when the answer isn't in the documents, the bot says so rather than hallucinating (verified behavior: a question about vacation carry-over correctly returned "I don't have that information" since the source document's legacy vacation section doesn't specify a carry-over policy, unlike PTO and sick leave)
 - **Local embeddings** — document content is embedded locally via FastEmbed; only the question and retrieved chunks are sent to Groq
-
-- 
+---
 Author
 
 Robert C. Son
+Scrum Master · Process Engineer · Prompt Engineer · Data Analyst · AI/ML Practitioner · CSM · CSPO · AI-Empowered SAFe Agilist · Active DoD Secret Clearance
+
 Scrum Master · Process Engineer · Prompt Engineer · Data Analyst · AI/ML Practitioner · CSM · CSPO · AI-Empowered SAFe Agilist · Active DoD Secret Clearance

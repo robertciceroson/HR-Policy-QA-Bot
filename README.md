@@ -220,7 +220,7 @@ ngrok http 8501
 | [LangChain](https://python.langchain.com/) | RAG pipeline orchestration |
 | [FAISS](https://github.com/facebookresearch/faiss) | Local vector similarity search |
 | [FastEmbed](https://github.com/qdrant/fastembed) | ONNX-based local embeddings (no torch needed) |
-| [Groq API](https://console.groq.com/) | Free LLM inference (Llama 3.3 70B) |
+| [Groq API](https://console.groq.com/) | Free LLM inference (Llama 3.3 70B via Groq) |
 | [PyPDF](https://pypdf.readthedocs.io/) | PDF loading and text extraction |
 | [Streamlit](https://streamlit.io/) | Chat UI |
 | [python-dotenv](https://pypi.org/project/python-dotenv/) | API key management |

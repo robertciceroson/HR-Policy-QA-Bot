@@ -237,4 +237,4 @@ ngrok http 8501
 Author
 
 Robert C. Son
-Scrum Master · Process Engineer · Prompt Engineer · Data Analyst · AI/ML Practitioner · CSM · CSPO · AI-Empowered SAFe Agilist · Active DoD Secret Clearance
+Technical Scrum Master · AI Business Process Analyst · Data Analyst · Translating AI/ML into ROI · CSM · CSPO · AI-Empowered SAFe Agilist · Active DoD Secret Clearance

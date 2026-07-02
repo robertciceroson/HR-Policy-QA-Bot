@@ -5,6 +5,9 @@ A **Retrieval-Augmented Generation (RAG)** chatbot that lets new employees ask n
 Built with **LangChain**, **FAISS**, **FastEmbed**, and **Groq (Llama 3.3 70B)**, served via **Streamlit**.
 **100% free to run** — no paid API required for embeddings; Groq offers a generous free tier.
 **[▶ Live Demo — try it now](https://hr-policy-app-bot-mfgzhuyzqgkkdglxg4mnj2.streamlit.app/)**
+
+> **No HR doc?** Download the included [sample handbook](sample_docs/HR_Policy_Handbook.pdf), upload it in the sidebar, and start asking questions.
+
 ---
 
 ## What It Does

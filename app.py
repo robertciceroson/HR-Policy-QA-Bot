@@ -199,8 +199,12 @@ with st.sidebar:
             file_name="HR_Policy_Handbook.pdf",
             mime="application/pdf"
         )
-st.markdown("---")
-        uploaded_files = st.file_uploader(
+    st.markdown("---")
+    uploaded_files = st.file_uploader(
+        "Choose PDF files",
+        type="pdf",
+        accept_multiple_files=True
+    )
         "Choose PDF files",
         type="pdf",
         accept_multiple_files=True

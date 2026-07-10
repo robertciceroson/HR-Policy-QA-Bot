@@ -200,7 +200,7 @@ with st.sidebar:
             mime="application/pdf"
         )
 st.markdown("---")
-    uploaded_files = st.file_uploader(
+        uploaded_files = st.file_uploader(
         "Choose PDF files",
         type="pdf",
         accept_multiple_files=True

@@ -192,6 +192,15 @@ with st.sidebar:
         "- 401k / Retirement Plan\n"
         "- PTO / Leave Policy\n"
     )
+        with open("sample_docs/HR_Policy_Handbook.pdf", "rb") as f:
+            st.download_button(
+                label="⬇️ No doc? Download sample handbook",
+                data=f,
+                file_name="HR_Policy_Handbook.pdf",
+                mime="application/pdf"
+        )
+st.markdown("---")
+    )
     uploaded_files = st.file_uploader(
         "Choose PDF files",
         type="pdf",

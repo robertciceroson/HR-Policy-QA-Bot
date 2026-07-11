@@ -4,9 +4,6 @@ A **Retrieval-Augmented Generation (RAG)** chatbot that lets new employees ask n
 
 Built with **LangChain**, **FAISS**, **FastEmbed**, and **Groq (Llama 3.3 70B)**, served via **Streamlit**.
 **100% free to run** — no paid API required for embeddings; Groq offers a generous free tier.
-**[▶ Live Demo — try it now](https://hr-policy-app-bot-mfgzhuyzqgkkdglxg4mnj2.streamlit.app/)**
-
-> **No HR doc?** Download the included [sample handbook](sample_docs/HR_Policy_Handbook.pdf), upload it in the sidebar, and start asking questions.
 
 ---
 
@@ -26,6 +23,8 @@ Upload an HR/benefits PDF and ask questions like:
 - *"How often are performance reviews conducted?"*
 - *"Am I eligible for FMLA leave?"*
 - *"What is the company's anti-harassment policy?"*
+
+![HR Policy Q&A Bot Demo](https://raw.githubusercontent.com/robertciceroson/HR-Policy-QA-Bot/main/hr_policy_bot_demo.gif)
 
 The bot retrieves the exact policy sections, generates a grounded answer, and cites the source document and page number. For questions outside the uploaded documents, it responds honestly that it doesn't have that information rather than guessing.
 
@@ -241,3 +240,4 @@ Author
 
 Robert C. Son
 Technical Scrum Master · AI Business Process Analyst · Data Analyst · Translating AI/ML into ROI · CSM · CSPO · AI-Empowered SAFe Agilist · Active DoD Secret Clearance
+
